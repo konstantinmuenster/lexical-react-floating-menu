@@ -1,10 +1,10 @@
-# ✍️ Rich Text Editor w/ Lexical & React
+# ✍️ Lexical React Floating Menu
 
 ## Installation
 
 ```sh
-git clone https://github.com/konstantinmuenster/lexical-rich-text-react-demo.git
-cd lexical-rich-text-react-demo
+git clone https://github.com/konstantinmuenster/lexical-react-floating-menu.git
+cd lexical-react-floating-menu
 pnpm install # or npm install
 pnpm run dev # or npm run dev
 ```
