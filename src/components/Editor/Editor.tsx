@@ -13,6 +13,7 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 
 import { isValidUrl } from "./utils/url";
 import { LocalStoragePlugin } from "./plugins/LocalStorage";
+import { FloatingMenuPlugin } from "./plugins/FloatingMenuPlugin";
 
 export const EDITOR_NAMESPACE = "lexical-editor";
 
@@ -82,6 +83,7 @@ export function LexicalEditor(props: LexicalEditorProps) {
       <LinkPlugin validateUrl={isValidUrl} />
       {/* Custom Plugins */}
       <LocalStoragePlugin namespace={EDITOR_NAMESPACE} />
+      <FloatingMenuPlugin />
     </LexicalComposer>
   );
 }
