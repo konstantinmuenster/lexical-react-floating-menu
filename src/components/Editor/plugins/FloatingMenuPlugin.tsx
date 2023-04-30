@@ -1,11 +1,6 @@
 import { computePosition } from "@floating-ui/dom";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import {
-  $getSelection,
-  $isRangeSelection,
-  COMMAND_PRIORITY_NORMAL,
-  SELECTION_CHANGE_COMMAND,
-} from "lexical";
+import { $getSelection, $isRangeSelection } from "lexical";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -38,11 +33,12 @@ export function FloatingMenuPlugin() {
   }, [isPointerDown]);
 
   const $handleSelectionChange = useCallback(() => {
-    if (editor.isComposing()) return false;
-
-    if (editor.getRootElement() !== document.activeElement) {
+    if (
+      editor.isComposing() ||
+      editor.getRootElement() !== document.activeElement
+    ) {
       setCoords(undefined);
-      return true;
+      return;
     }
 
     const selection = $getSelection();
@@ -52,26 +48,22 @@ export function FloatingMenuPlugin() {
     } else {
       setCoords(undefined);
     }
-
-    return true;
   }, [editor, calculatePosition]);
 
   useEffect(() => {
-    const unregisterCommand = editor.registerCommand(
-      SELECTION_CHANGE_COMMAND,
-      $handleSelectionChange,
-      COMMAND_PRIORITY_NORMAL
+    const unregisterListener = editor.registerUpdateListener(
+      ({ editorState }) => {
+        editorState.read(() => $handleSelectionChange());
+      }
     );
-    return unregisterCommand;
+    return unregisterListener;
   }, [editor, $handleSelectionChange]);
 
   const show = coords !== undefined;
 
   useEffect(() => {
     if (!show && isPointerReleased) {
-      editor.getEditorState().read(() => {
-        $handleSelectionChange();
-      });
+      editor.getEditorState().read(() => $handleSelectionChange());
     }
     // Adding show to the dependency array causes an issue if
     // a range selection is dismissed by navigating via arrow keys.

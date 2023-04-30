@@ -1,6 +1,6 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { FORMAT_TEXT_COMMAND } from "lexical";
+import { $getSelection, $isRangeSelection, FORMAT_TEXT_COMMAND } from "lexical";
 
 import { IconButton } from "../../IconButton";
 
@@ -33,6 +33,26 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
       isUnderline: false,
     });
 
+    useEffect(() => {
+      const unregisterListener = editor.registerUpdateListener(
+        ({ editorState }) => {
+          editorState.read(() => {
+            const selection = $getSelection();
+            if (!$isRangeSelection(selection)) return;
+
+            setState({
+              isBold: selection.hasFormat("bold"),
+              isCode: selection.hasFormat("code"),
+              isItalic: selection.hasFormat("italic"),
+              isStrikethrough: selection.hasFormat("strikethrough"),
+              isUnderline: selection.hasFormat("underline"),
+            });
+          });
+        }
+      );
+      return unregisterListener;
+    }, [editor]);
+
     return (
       <div
         ref={ref}
@@ -52,7 +72,6 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
           active={state.isBold}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
-            setState({ ...state, isBold: !state.isBold });
           }}
         />
         <IconButton
@@ -61,7 +80,6 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
           active={state.isItalic}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
-            setState({ ...state, isItalic: !state.isItalic });
           }}
         />
         <IconButton
@@ -70,7 +88,6 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
           active={state.isUnderline}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
-            setState({ ...state, isUnderline: !state.isUnderline });
           }}
         />
         <IconButton
@@ -79,7 +96,6 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
           active={state.isStrikethrough}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
-            setState({ ...state, isStrikethrough: !state.isStrikethrough });
           }}
         />
         <IconButton
@@ -88,7 +104,6 @@ export const FloatingMenu = forwardRef<HTMLDivElement, FloatingMenuProps>(
           active={state.isCode}
           onClick={() => {
             editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
-            setState({ ...state, isCode: !state.isCode });
           }}
         />
       </div>
