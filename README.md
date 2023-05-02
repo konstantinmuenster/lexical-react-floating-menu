@@ -1,10 +1,20 @@
-# ✍️ Rich Text Editor w/ Lexical & React
+# Lexical React Floating Menu Demo
+
+This project was created as a demo for my blog post: [How To Build A Floating Menu With Lexical and React](https://konstantin.digital/blog/how-to-build-a-floating-menu-with-lexical-react)
+
+<img src="screenshot.gif" alt="Floating Menu built for Lexical" width="500" />
+
+### Introducing `lexical-floating-menu`
+
+Since interactive editor components are hard to get right, I released `lexical-floating-menu` – a headless and fully customizable plugin to create floating menus easily.
+
+You can simply install and use it as any other npm package. You find it here: [konstantinmuenster/lexical-floating-menu](https://github.com/konstantinmuenster/lexical-floating-menu)
 
 ## Installation
 
 ```sh
-git clone https://github.com/konstantinmuenster/lexical-rich-text-react-demo.git
-cd lexical-rich-text-react-demo
+git clone https://github.com/konstantinmuenster/lexical-react-floating-menu.git
+cd lexical-react-floating-menu
 pnpm install # or npm install
 pnpm run dev # or npm run dev
 ```
